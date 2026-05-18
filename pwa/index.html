@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#f4efe6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Lecteur HTML">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" type="image/svg+xml" href="./icon.svg">
+    <link rel="apple-touch-icon" href="./icon.svg">
+    <link rel="manifest" href="./manifest.json">
+    <title>Lecteur HTML</title>
+    <style>
+      :root {
+        --bg: #f4efe6;
+        --bg-accent: #efe4d2;
+        --card: rgba(255, 255, 255, 0.82);
+        --text: #1d1a16;
+        --muted: #6d655c;
+        --line: rgba(29, 26, 22, 0.08);
+        --shadow: 0 20px 60px rgba(71, 48, 20, 0.12);
+        --button-text: #ffffff;
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-left: env(safe-area-inset-left, 0px);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 35%),
+          radial-gradient(circle at bottom right, rgba(226, 198, 159, 0.35), transparent 30%),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-accent) 100%);
+        color: var(--text);
+        font-family: "Avenir Next", "SF Pro Display", "Helvetica Neue", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        padding:
+          calc(var(--safe-top) + 24px)
+          calc(var(--safe-right) + 20px)
+          calc(var(--safe-bottom) + 24px)
+          calc(var(--safe-left) + 20px);
+      }
+
+      .shell {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        min-height: calc(100vh - var(--safe-top) - var(--safe-bottom) - 48px);
+      }
+
+      .panel {
+        display: grid;
+        gap: 16px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--card);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.5;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 56px;
+        padding: 0 22px;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #222222 0%, #090909 100%);
+        color: var(--button-text);
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.18),
+          0 16px 30px rgba(0, 0, 0, 0.18);
+        cursor: pointer;
+      }
+
+      .button:active {
+        transform: translateY(1px) scale(0.995);
+      }
+
+      .button.secondary {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(241, 237, 230, 0.98) 100%);
+        color: var(--text);
+        border: 1px solid var(--line);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.8),
+          0 10px 24px rgba(71, 48, 20, 0.08);
+      }
+
+      .button.danger {
+        background: linear-gradient(180deg, #8b1f1f 0%, #5d1010 100%);
+        color: #ffffff;
+      }
+
+      .button[disabled] {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .button input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        min-height: 24px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .viewer-shell {
+        position: relative;
+        flex: 1;
+        min-height: 52vh;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.66);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: var(--shadow);
+      }
+
+      .shell.has-content .viewer-shell {
+        min-height: calc(100vh - var(--safe-top) - var(--safe-bottom) - 210px);
+      }
+
+      .viewer-shell.fullscreen {
+        position: fixed;
+        inset:
+          calc(var(--safe-top) + 8px)
+          calc(var(--safe-right) + 8px)
+          calc(var(--safe-bottom) + 8px)
+          calc(var(--safe-left) + 8px);
+        z-index: 9999;
+        min-height: auto;
+        border-radius: 24px;
+        background: #ffffff;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        border: 0;
+        background: #ffffff;
+      }
+
+      .viewer-shell.fullscreen iframe {
+        min-height: 100%;
+      }
+
+      .viewer-toolbar {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 5;
+        display: flex;
+        gap: 10px;
+      }
+
+      .icon-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(29, 26, 22, 0.1);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--text);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        cursor: pointer;
+      }
+
+      .icon-button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      .icon-button svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .placeholder {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      .placeholder strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text);
+        font-size: 1.1rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .scrim {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        background: rgba(14, 12, 10, 0.45);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      .footer-note {
+        padding: 4px 4px 0;
+        text-align: center;
+        color: rgba(29, 26, 22, 0.58);
+        font-size: 0.68rem;
+        line-height: 1.4;
+        letter-spacing: 0.01em;
+      }
+
+      .footer-note a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(29, 26, 22, 0.18);
+      }
+
+      .footer-note a:hover {
+        color: var(--text);
+        border-bottom-color: rgba(29, 26, 22, 0.42);
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding:
+            calc(var(--safe-top) + 14px)
+            calc(var(--safe-right) + 14px)
+            calc(var(--safe-bottom) + 18px)
+            calc(var(--safe-left) + 14px);
+        }
+
+        .panel,
+        .viewer-shell {
+          border-radius: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div>
+          <h1>Lecteur HTML</h1>
+          <p>Charge un fichier HTML depuis l’app Fichiers et affiche-le instantanément dans la PWA.</p>
+        </div>
+
+        <div class="controls">
+          <label class="button" for="html-file">
+            Choisir un fichier HTML
+            <input id="html-file" type="file" accept=".html,.htm,text/html">
+          </label>
+          <button id="open-external" class="button secondary" type="button" disabled>Partager / Ouvrir dans...</button>
+          <button id="clear-file" class="button danger" type="button" disabled>Supprimer le fichier</button>
+        </div>
+
+        <div class="meta">
+          <div id="file-name" class="pill">Aucun fichier charge</div>
+          <div id="status" class="pill">Hors ligne pret</div>
+        </div>
+      </section>
+
+      <section class="viewer-shell">
+        <div class="viewer-toolbar">
+          <button id="toggle-fullscreen" class="icon-button" type="button" disabled aria-label="Agrandir">
+            <svg id="fullscreen-enter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 3H3v5"></path>
+              <path d="M16 3h5v5"></path>
+              <path d="M21 16v5h-5"></path>
+              <path d="M3 16v5h5"></path>
+            </svg>
+            <svg id="fullscreen-exit-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 3v5H3"></path>
+              <path d="M16 3v5h5"></path>
+              <path d="M21 16h-5v5"></path>
+              <path d="M3 16h5v5"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="placeholder" class="placeholder">
+          <div>
+            <strong>Selectionne un fichier HTML</strong>
+            Le contenu s’ouvrira ici en plein ecran, meme si ton iPhone ou iPad est en mode avion.
+          </div>
+        </div>
+        <iframe
+          id="viewer"
+          title="Apercu HTML"
+          sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
+          referrerpolicy="no-referrer"
+        ></iframe>
+      </section>
+
+      <footer class="footer-note">
+        CC BY-NC-ND · cree par william ·
+        <a href="https://github.com/bwillou1" target="_blank" rel="noopener noreferrer">github bwillou1</a>
+      </footer>
+    </main>
+
+    <div id="scrim" class="scrim hidden" aria-hidden="true"></div>
+
+    <script>
+      const fileInput = document.getElementById("html-file");
+      const shell = document.querySelector(".shell");
+      const viewerShell = document.querySelector(".viewer-shell");
+      const viewer = document.getElementById("viewer");
+      const placeholder = document.getElementById("placeholder");
+      const fileName = document.getElementById("file-name");
+      const status = document.getElementById("status");
+      const openExternalButton = document.getElementById("open-external");
+      const clearFileButton = document.getElementById("clear-file");
+      const fullscreenButton = document.getElementById("toggle-fullscreen");
+      const fullscreenEnterIcon = document.getElementById("fullscreen-enter-icon");
+      const fullscreenExitIcon = document.getElementById("fullscreen-exit-icon");
+      const scrim = document.getElementById("scrim");
+
+      let currentBlobUrl = null;
+      let currentHtml = "";
+      let isFullscreen = false;
+
+      function setStatus(message) {
+        status.textContent = message;
+      }
+
+      function releaseBlobUrl() {
+        if (currentBlobUrl) {
+          URL.revokeObjectURL(currentBlobUrl);
+          currentBlobUrl = null;
+        }
+      }
+
+      function updateButtons() {
+        const hasContent = Boolean(currentHtml);
+        openExternalButton.disabled = !hasContent;
+        clearFileButton.disabled = !hasContent;
+        fullscreenButton.disabled = !hasContent;
+      }
+
+      function syncFullscreenUi() {
+        viewerShell.classList.toggle("fullscreen", isFullscreen);
+        scrim.classList.toggle("hidden", !isFullscreen);
+        fullscreenEnterIcon.classList.toggle("hidden", isFullscreen);
+        fullscreenExitIcon.classList.toggle("hidden", !isFullscreen);
+        fullscreenButton.setAttribute("aria-label", isFullscreen ? "Reduire" : "Agrandir");
+      }
+
+      function exitFullscreenMode() {
+        if (!isFullscreen) {
+          return;
+        }
+
+        isFullscreen = false;
+        syncFullscreenUi();
+      }
+
+      function currentFileBaseName() {
+        const rawName = fileName.textContent && fileName.textContent !== "Aucun fichier charge"
+          ? fileName.textContent
+          : "document.html";
+        return rawName.endsWith(".html") || rawName.endsWith(".htm") ? rawName : `${rawName}.html`;
+      }
+
+      function resetViewer(message = "Hors ligne pret") {
+        currentHtml = "";
+        exitFullscreenMode();
+        releaseBlobUrl();
+        viewer.removeAttribute("src");
+        viewer.removeAttribute("srcdoc");
+        placeholder.classList.remove("hidden");
+        shell.classList.remove("has-content");
+        fileName.textContent = "Aucun fichier charge";
+        setStatus(message);
+        updateButtons();
+      }
+
+      function wrapHtmlDocument(rawHtml) {
+        if (/<head[\s>]/i.test(rawHtml)) {
+          return rawHtml.replace(/<head([^>]*)>/i, '<head$1><base href="about:srcdoc">');
+        }
+
+        if (/<html[\s>]/i.test(rawHtml)) {
+          return rawHtml.replace(/<html([^>]*)>/i, '<html$1><head><base href="about:srcdoc"></head>');
+        }
+
+        return `<!doctype html><html><head><base href="about:srcdoc"></head><body>${rawHtml}</body></html>`;
+      }
+
+      function renderHtml(rawHtml) {
+        releaseBlobUrl();
+        currentHtml = rawHtml;
+        const finalHtml = wrapHtmlDocument(rawHtml);
+
+        try {
+          viewer.srcdoc = finalHtml;
+          setStatus("Fichier affiche");
+        } catch (error) {
+          const blob = new Blob([finalHtml], { type: "text/html" });
+          currentBlobUrl = URL.createObjectURL(blob);
+          viewer.src = currentBlobUrl;
+          setStatus("Fichier affiche");
+        }
+
+        placeholder.classList.add("hidden");
+        shell.classList.add("has-content");
+        updateButtons();
+      }
+
+      fileInput.addEventListener("change", async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+          return;
+        }
+
+        fileName.textContent = file.name;
+        setStatus("Lecture du fichier...");
+
+        try {
+          const html = await file.text();
+          renderHtml(html);
+        } catch (error) {
+          resetViewer("Erreur de lecture");
+          fileName.textContent = "Impossible de lire ce fichier";
+          console.error(error);
+        } finally {
+          fileInput.value = "";
+        }
+      });
+
+      openExternalButton.addEventListener("click", async () => {
+        if (!currentHtml) {
+          return;
+        }
+
+        const finalHtml = wrapHtmlDocument(currentHtml);
+        const exportFile = new File([finalHtml], currentFileBaseName(), { type: "text/html" });
+
+        try {
+          if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [exportFile] }))) {
+            await navigator.share({
+              title: currentFileBaseName(),
+              text: "Ouvrir ce fichier HTML dans une autre app",
+              files: [exportFile]
+            });
+            setStatus("Feuille de partage ouverte");
+            return;
+          }
+        } catch (error) {
+          if (error && error.name === "AbortError") {
+            setStatus("Partage annule");
+            return;
+          }
+          console.error(error);
+        }
+
+        releaseBlobUrl();
+        currentBlobUrl = URL.createObjectURL(exportFile);
+
+        const openedWindow = window.open(currentBlobUrl, "_blank", "noopener,noreferrer");
+        if (openedWindow) {
+          setStatus("Ouverture externe demandee");
+          return;
+        }
+
+        const tempLink = document.createElement("a");
+        tempLink.href = currentBlobUrl;
+        tempLink.download = currentFileBaseName();
+        tempLink.rel = "noopener";
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        tempLink.remove();
+        setStatus("Export du fichier lance");
+      });
+
+      clearFileButton.addEventListener("click", () => {
+        resetViewer("Fichier supprime");
+      });
+
+      fullscreenButton.addEventListener("click", () => {
+        if (!currentHtml) {
+          return;
+        }
+
+        isFullscreen = !isFullscreen;
+        syncFullscreenUi();
+      });
+
+      scrim.addEventListener("click", () => {
+        exitFullscreenMode();
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          exitFullscreenMode();
+        }
+      });
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", async () => {
+          try {
+            await navigator.serviceWorker.register("./sw.js");
+            setStatus("Hors ligne pret");
+          } catch (error) {
+            setStatus("Mode hors ligne indisponible");
+            console.error(error);
+          }
+        });
+      } else {
+        setStatus("Service Worker non pris en charge");
+      }
+
+      updateButtons();
+      syncFullscreenUi();
+      window.addEventListener("pagehide", releaseBlobUrl);
+      window.addEventListener("beforeunload", releaseBlobUrl);
+    </script>
+  </body>
+</html>

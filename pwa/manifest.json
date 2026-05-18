@@ -1,0 +1,25 @@
+{
+  "name": "Lecteur de fichiers HTML",
+  "short_name": "Lecteur HTML",
+  "description": "PWA hors ligne pour ouvrir et afficher des fichiers HTML locaux sur iPhone et iPad.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4efe6",
+  "theme_color": "#f4efe6",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

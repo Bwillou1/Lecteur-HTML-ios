@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Lecteur HTML</title>
+  <desc id="desc">Icone PWA beige avec balises HTML et cadre d'affichage.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7f2ea"/>
+      <stop offset="100%" stop-color="#e7d5bb"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d1a16"/>
+      <stop offset="100%" stop-color="#4c3b28"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <circle cx="790" cy="220" r="150" fill="#ffffff" opacity="0.45"/>
+  <rect x="168" y="214" width="688" height="566" rx="72" fill="#fffaf4" stroke="url(#frame)" stroke-width="28"/>
+  <rect x="214" y="272" width="596" height="70" rx="24" fill="#eee3d3"/>
+  <circle cx="262" cy="306" r="12" fill="#8b1f1f"/>
+  <circle cx="304" cy="306" r="12" fill="#b87b2a"/>
+  <circle cx="346" cy="306" r="12" fill="#5f7e45"/>
+  <path d="M401 513 306 596l95 83" fill="none" stroke="#1d1a16" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"/>
+  <path d="m623 491-84 211" fill="none" stroke="#1d1a16" stroke-linecap="round" stroke-width="48"/>
+  <path d="m622 513 95 83-95 83" fill="none" stroke="#1d1a16" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"/>
+  <rect x="246" y="830" width="532" height="36" rx="18" fill="#1d1a16" opacity="0.12"/>
+</svg>
