@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bwillou1.github.io/Lecteur-HTML-ios/sitemap.xml

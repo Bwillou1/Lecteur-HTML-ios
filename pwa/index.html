@@ -1,8 +1,19 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <title>Lecteur HTML iOS — Visualiseur &amp; Testeur HTML Hors-Ligne</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Application PWA hors-ligne gratuite pour iPhone, iPad et navigateur web. Ouvrez, lisez et prévisualisez des fichiers ou fragments de code HTML en toute confidentialité.">
+    <meta name="keywords" content="lecteur html, lecteur html ios, visualiseur html, pwa html, apercu html iphone, ouvrir html ipad, testeur html safari, html viewer ios, run html offline">
+    <meta name="author" content="William Guindon">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://bwillou1.github.io/Lecteur-HTML-ios/pwa/">
+
+    <!-- iOS / PWA Configuration -->
     <meta name="theme-color" content="#f4efe6">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -12,7 +23,109 @@
     <link rel="icon" type="image/svg+xml" href="./icon.svg">
     <link rel="apple-touch-icon" href="./icon.svg">
     <link rel="manifest" href="./manifest.json">
-    <title>Lecteur HTML</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bwillou1.github.io/Lecteur-HTML-ios/pwa/">
+    <meta property="og:title" content="Lecteur HTML iOS — Visualiseur &amp; Testeur HTML Hors-Ligne">
+    <meta property="og:description" content="Ouvrez, lisez et testez vos fichiers HTML locaux sur iPhone, iPad et navigateur avec cette application PWA 100% hors-ligne.">
+    <meta property="og:image" content="https://bwillou1.github.io/Lecteur-HTML-ios/og-image.png">
+    <meta property="og:image:secure_url" content="https://bwillou1.github.io/Lecteur-HTML-ios/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Aperçu de Lecteur HTML iOS">
+    <meta property="og:site_name" content="Lecteur HTML">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://bwillou1.github.io/Lecteur-HTML-ios/pwa/">
+    <meta name="twitter:title" content="Lecteur HTML iOS — Visualiseur HTML Hors-Ligne">
+    <meta name="twitter:description" content="Ouvrez, lisez et testez vos fichiers HTML locaux sur iPhone et iPad. PWA hors-ligne gratuite.">
+    <meta name="twitter:image" content="https://bwillou1.github.io/Lecteur-HTML-ios/og-image.png">
+    <meta name="twitter:image:alt" content="Lecteur HTML iOS">
+
+    <!-- Schema.org Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://bwillou1.github.io/Lecteur-HTML-ios/pwa/#app",
+          "name": "Lecteur HTML",
+          "alternateName": ["Lecteur HTML iOS", "HTML Viewer iOS PWA"],
+          "url": "https://bwillou1.github.io/Lecteur-HTML-ios/pwa/",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "iOS, iPadOS, macOS, Android, Windows, Linux",
+          "browserRequirements": "Requires JavaScript. Requires HTML5 support.",
+          "description": "Application PWA gratuite et 100% hors-ligne pour ouvrir, visualiser et inspecter des fichiers et du code HTML directement sur iPhone, iPad et sur le web.",
+          "inLanguage": "fr",
+          "isAccessibleForFree": true,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CAD"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "William Guindon",
+            "url": "https://github.com/Bwillou1"
+          },
+          "screenshot": "https://bwillou1.github.io/Lecteur-HTML-ios/og-image.png",
+          "featureList": [
+            "Importation instantanée de fichiers .html locaux",
+            "Rendu dynamique et sécurisé dans un conteneur dédié",
+            "Support hors-ligne intégral avec Service Worker",
+            "Adapté tactilement pour iPhone et iPad",
+            "Exportation et partage de code HTML"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://bwillou1.github.io/Lecteur-HTML-ios/#website",
+          "url": "https://bwillou1.github.io/Lecteur-HTML-ios/",
+          "name": "Lecteur HTML iOS",
+          "inLanguage": "fr",
+          "publisher": {
+            "@type": "Person",
+            "name": "William Guindon"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://bwillou1.github.io/Lecteur-HTML-ios/pwa/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Comment ouvrir un fichier HTML sur iPhone ou iPad ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Ouvrez Lecteur HTML, touchez le bouton de chargement de fichier, choisissez votre fichier .html depuis l'application Fichiers d'iOS ou iCloud Drive, et il s'affiche instantanément."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Lecteur HTML fonctionne-t-il sans connexion Internet ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui, Lecteur HTML est une PWA (Progressive Web App) équipée d'un Service Worker qui met en cache tous les composants pour une utilisation 100% hors-ligne."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment installer Lecteur HTML sur l'écran d'accueil ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Dans Safari sur iOS, touchez le bouton Partager puis choisissez 'Sur l'écran d'accueil'. L'icône de l'application sera ajoutée et fonctionnera comme une app native."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
     <style>
       :root {
         --bg: #f4efe6;

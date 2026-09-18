@@ -1,10 +1,11 @@
-const CACHE_NAME = "lecteur-html-pwa-v1";
+const CACHE_NAME = "lecteur-html-pwa-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
   "./sw.js",
-  "./icon.svg"
+  "./icon.svg",
+  "./og-image.png"
 ];
 
 self.addEventListener("install", (event) => {
